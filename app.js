@@ -60,13 +60,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateActiveTocLink() {
         let currentSectionId = '';
+        const threshold = window.innerWidth <= 768 ? 100 : 150;
         
         // Find which section is currently in view
         sections.forEach(section => {
             const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
             // Shift trigger threshold down a bit
-            if (window.scrollY >= sectionTop - 150) {
+            if (window.scrollY >= sectionTop - threshold) {
                 currentSectionId = section.getAttribute('id');
             }
         });
@@ -78,9 +78,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Apply active class
         tocLinks.forEach(link => {
+            const wasActive = link.classList.contains('active');
             link.classList.remove('active');
             if (link.getAttribute('href') === `#${currentSectionId}`) {
                 link.classList.add('active');
+                
+                // Center active link in the horizontal scrollable TOC menu on mobile/tablet
+                const tocContainer = document.getElementById('table-of-contents');
+                if (tocContainer && window.innerWidth <= 1024 && !wasActive) {
+                    const scrollLeft = link.offsetLeft - (tocContainer.clientWidth / 2) + (link.clientWidth / 2);
+                    tocContainer.scrollTo({
+                        left: scrollLeft,
+                        behavior: 'smooth'
+                    });
+                }
             }
         });
     }
