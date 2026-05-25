@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const body = document.body;
 
     // Load saved theme preference
-    const savedTheme = localStorage.getItem('theme') || 'dark-theme';
+    const savedTheme = localStorage.getItem('theme') || 'light-theme';
     body.className = savedTheme;
 
     themeToggleBtn.addEventListener('click', () => {
